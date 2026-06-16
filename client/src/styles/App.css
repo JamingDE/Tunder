@@ -703,6 +703,141 @@ body {
   font-style: italic;
 }
 
+/* SWIPE HEADER */
+.swipe-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  z-index: 10;
+}
+
+.swipe-header h1 {
+  font-size: 1.6rem;
+  background: linear-gradient(135deg, #fe3c72, #ff6b6b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.chat-list-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  position: relative;
+  padding: 4px;
+}
+
+/* CHAT LIST OVERLAY */
+.chat-list-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1500;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.chat-list-panel {
+  width: 80%;
+  max-width: 350px;
+  height: 100%;
+  background: white;
+  box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.chat-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.chat-list-header h2 {
+  font-size: 1.3rem;
+  color: var(--primary);
+}
+
+.close-chat-list {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-light);
+}
+
+.chat-list-items {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.no-chats {
+  text-align: center;
+  color: var(--text-light);
+  margin-top: 40px;
+}
+
+.chat-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.chat-list-item:hover {
+  background: #f5f5f5;
+}
+
+.chat-list-item img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.chat-item-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chat-item-info h4 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.online-dot-small {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.online-text-small {
+  font-size: 0.75rem;
+  color: var(--green);
+}
+
 /* RESPONSIVE */
 @media (max-width: 480px) {
   .entry-card {

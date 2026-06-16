@@ -15,6 +15,7 @@ export default function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showMatchAnimation, setShowMatchAnimation] = useState(null);
   const [legalModal, setLegalModal] = useState(null);
+  const [showChatList, setShowChatList] = useState(false);
 
   useEffect(() => {
     if (userName) {
@@ -27,8 +28,11 @@ export default function App() {
       fetch('/api/profiles')
         .then(r => r.json())
         .then(data => {
-          const shuffled = data.sort(() => Math.random() - 0.5);
-          setProfiles(shuffled);
+          const johnny = data.find(p => p.id === 19);
+          const others = data.filter(p => p.id !== 19).sort(() => Math.random() - 0.5);
+          const johnnyIndex = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+          others.splice(johnnyIndex, 0, johnny);
+          setProfiles(others);
         });
     }
   }, [screen, profiles.length]);
@@ -45,9 +49,6 @@ export default function App() {
         const matchedProfile = profiles[currentIndex];
         setMatches(prev => [...prev, matchedProfile]);
         setShowMatchAnimation(matchedProfile);
-        setTimeout(() => {
-          setShowMatchAnimation(null);
-        }, 2000);
       }
     }
     if (currentIndex < profiles.length - 1) {
@@ -93,6 +94,12 @@ export default function App() {
   if (screen === SCREENS.SWIPE) {
     return (
       <>
+        <div className="swipe-header">
+          <h1>Tunder 🔥</h1>
+          <button className="chat-list-btn" onClick={() => setShowChatList(true)}>
+            💬 {matches.length > 0 && <span className="badge">{matches.length}</span>}
+          </button>
+        </div>
         <SwipeDeck
           profiles={profiles}
           currentIndex={currentIndex}
@@ -111,6 +118,32 @@ export default function App() {
               <button onClick={() => setShowMatchAnimation(null)} className="skip-btn">
                 Weiter swipen
               </button>
+            </div>
+          </div>
+        )}
+        {showChatList && (
+          <div className="chat-list-overlay" onClick={() => setShowChatList(false)}>
+            <div className="chat-list-panel" onClick={(e) => e.stopPropagation()}>
+              <div className="chat-list-header">
+                <h2>Deine Chats</h2>
+                <button className="close-chat-list" onClick={() => setShowChatList(false)}>✕</button>
+              </div>
+              <div className="chat-list-items">
+                {matches.length === 0 ? (
+                  <p className="no-chats">Noch keine Chats. Swipe right!</p>
+                ) : (
+                  matches.map(match => (
+                    <div key={match.id} className="chat-list-item" onClick={() => { setShowChatList(false); openChat(match); }}>
+                      <img src={match.image} alt={match.name} />
+                      <div className="chat-item-info">
+                        <h4>{match.name}</h4>
+                        <span className="online-dot-small"></span>
+                        <span className="online-text-small">Online</span>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
         )}
