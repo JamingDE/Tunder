@@ -1,0 +1,164 @@
+import { useState, useEffect, useCallback } from 'react';
+import NameEntry from './components/NameEntry';
+import SwipeDeck from './components/SwipeDeck';
+import Chat from './components/Chat';
+
+const SCREENS = { ENTRY: 'entry', SWIPE: 'swipe', MATCHES: 'matches', CHAT: 'chat' };
+
+export default function App() {
+  const [screen, setScreen] = useState(SCREENS.ENTRY);
+  const [userName, setUserName] = useState(sessionStorage.getItem('tunder_user') || '');
+  const [profiles, setProfiles] = useState([]);
+  const [matches, setMatches] = useState([]);
+  const [activeChat, setActiveChat] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [showMatchAnimation, setShowMatchAnimation] = useState(null);
+
+  useEffect(() => {
+    if (userName) {
+      sessionStorage.setItem('tunder_user', userName);
+    }
+  }, [userName]);
+
+  useEffect(() => {
+    if (screen === SCREENS.SWIPE && profiles.length === 0) {
+      fetch('/api/profiles')
+        .then(r => r.json())
+        .then(data => {
+          const shuffled = data.sort(() => Math.random() - 0.5);
+          setProfiles(shuffled);
+        });
+    }
+  }, [screen, profiles.length]);
+
+  const handleNameSubmit = (name) => {
+    setUserName(name);
+    setScreen(SCREENS.SWIPE);
+  };
+
+  const handleSwipe = useCallback((direction) => {
+    if (direction === 'right') {
+      const matchChance = Math.random();
+      if (matchChance > 0.3) {
+        const matchedProfile = profiles[currentIndex];
+        setMatches(prev => [...prev, matchedProfile]);
+        setShowMatchAnimation(matchedProfile);
+        setTimeout(() => {
+          setShowMatchAnimation(null);
+        }, 2000);
+      }
+    }
+    if (currentIndex < profiles.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      setScreen(SCREENS.MATCHES);
+    }
+  }, [currentIndex, profiles]);
+
+  const openChat = (profile) => {
+    setActiveChat(profile);
+    setScreen(SCREENS.CHAT);
+  };
+
+  const backToSwipe = () => {
+    setScreen(SCREENS.SWIPE);
+    setActiveChat(null);
+  };
+
+  const backToMatches = () => {
+    setScreen(SCREENS.MATCHES);
+    setActiveChat(null);
+  };
+
+  if (screen === SCREENS.ENTRY) {
+    return <NameEntry onSubmit={handleNameSubmit} />;
+  }
+
+  if (screen === SCREENS.SWIPE) {
+    return (
+      <>
+        <SwipeDeck
+          profiles={profiles}
+          currentIndex={currentIndex}
+          onSwipe={handleSwipe}
+          userName={userName}
+        />
+        {showMatchAnimation && (
+          <div className="match-animation">
+            <div className="match-content">
+              <h1>It's a Match!</h1>
+              <p>{showMatchAnimation.name} findet dich auch gut!</p>
+              <img src={showMatchAnimation.image} alt={showMatchAnimation.name} className="match-image" />
+              <button onClick={() => { setShowMatchAnimation(null); openChat(showMatchAnimation); }}>
+                Schreibe ihr/ihm!
+              </button>
+              <button onClick={() => setShowMatchAnimation(null)} className="skip-btn">
+                Weiter swipen
+              </button>
+            </div>
+          </div>
+        )}
+        <div className="bottom-nav">
+          <button onClick={backToSwipe} className="nav-btn active">
+            <span className="nav-icon">🔥</span>
+            <span>Swipe</span>
+          </button>
+          <button onClick={() => setScreen(SCREENS.MATCHES)} className="nav-btn">
+            <span className="nav-icon">💬</span>
+            {matches.length > 0 && <span className="badge">{matches.length}</span>}
+            <span>Matches</span>
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  if (screen === SCREENS.MATCHES) {
+    return (
+      <>
+        <div className="matches-screen">
+          <h1>Deine Matches 🔥</h1>
+          {matches.length === 0 ? (
+            <p className="no-matches">Noch keine Matches. Weiter swipen!</p>
+          ) : (
+            <div className="matches-grid">
+              {matches.map(match => (
+                <div key={match.id} className="match-card" onClick={() => openChat(match)}>
+                  <img src={match.image} alt={match.name} />
+                  <div className="match-info">
+                    <h3>{match.name}, {match.age}</h3>
+                    <span className="online-dot"></span>
+                    <span className="online-text">Online</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="bottom-nav">
+          <button onClick={backToSwipe} className="nav-btn">
+            <span className="nav-icon">🔥</span>
+            <span>Swipe</span>
+          </button>
+          <button onClick={() => {}} className="nav-btn active">
+            <span className="nav-icon">💬</span>
+            {matches.length > 0 && <span className="badge">{matches.length}</span>}
+            <span>Matches</span>
+          </button>
+        </div>
+      </>
+    );
+  }
+
+  if (screen === SCREENS.CHAT && activeChat) {
+    return (
+      <Chat
+        profile={activeChat}
+        userName={userName}
+        onBack={backToMatches}
+      />
+    );
+  }
+
+  return null;
+}

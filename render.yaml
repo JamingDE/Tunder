@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: tunder
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: MODEL
+        value: "openrouter/owl-alpha"
+      - key: NODE_ENV
+        value: production
