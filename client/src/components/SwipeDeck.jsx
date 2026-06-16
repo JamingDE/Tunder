@@ -40,9 +40,6 @@ export default function SwipeDeck({ profiles, currentIndex, onSwipe, userName })
 
   return (
     <div className="swipe-screen">
-      <div className="header">
-        <h1>Tunder 🔥</h1>
-      </div>
       <div className="card-container">
         {profiles.length > currentIndex + 1 && (
           <div className="card card-background">

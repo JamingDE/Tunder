@@ -16,6 +16,7 @@ export default function App() {
   const [showMatchAnimation, setShowMatchAnimation] = useState(null);
   const [legalModal, setLegalModal] = useState(null);
   const [showChatList, setShowChatList] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (userName) {
@@ -30,7 +31,7 @@ export default function App() {
         .then(data => {
           const johnny = data.find(p => p.id === 19);
           const others = data.filter(p => p.id !== 19).sort(() => Math.random() - 0.5);
-          const johnnyIndex = Math.floor(Math.random() * 3) + 1; // 1, 2, or 3
+          const johnnyIndex = Math.floor(Math.random() * 3) + 1;
           others.splice(johnnyIndex, 0, johnny);
           setProfiles(others);
         });
@@ -73,19 +74,35 @@ export default function App() {
     setActiveChat(null);
   };
 
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.log('Fullscreen error:', err);
+      });
+      setIsFullscreen(true);
+    } else {
+      document.exitFullscreen();
+      setIsFullscreen(false);
+    }
+  };
+
+  const Footer = () => (
+    <div className="footer">
+      <button onClick={() => setLegalModal('impressum')}>Impressum</button>
+      <button onClick={() => setLegalModal('datenschutz')}>Datenschutz</button>
+      <span className="yt-hidden">
+        <a href="https://youtube.com/@jamingde" target="_blank" rel="noopener noreferrer">
+          Tunder Partner
+        </a>
+      </span>
+    </div>
+  );
+
   if (screen === SCREENS.ENTRY) {
     return (
       <>
         <NameEntry onSubmit={handleNameSubmit} />
-        <div className="footer">
-          <button onClick={() => setLegalModal('impressum')}>Impressum</button>
-          <button onClick={() => setLegalModal('datenschutz')}>Datenschutz</button>
-          <span className="yt-hidden">
-            <a href="https://youtube.com/@jamingde" target="_blank" rel="noopener noreferrer">
-              Tunder Partner
-            </a>
-          </span>
-        </div>
+        <Footer />
         {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
       </>
     );
@@ -93,19 +110,26 @@ export default function App() {
 
   if (screen === SCREENS.SWIPE) {
     return (
-      <>
+      <div className="app-container">
         <div className="swipe-header">
           <h1>Tunder 🔥</h1>
-          <button className="chat-list-btn" onClick={() => setShowChatList(true)}>
-            💬 {matches.length > 0 && <span className="badge">{matches.length}</span>}
-          </button>
+          <div className="header-actions">
+            <button className="chat-list-btn" onClick={() => setShowChatList(true)}>
+              💬 {matches.length > 0 && <span className="badge">{matches.length}</span>}
+            </button>
+            <button className="fullscreen-btn" onClick={toggleFullscreen} title="Vollbild">
+              {isFullscreen ? '⊡' : '⛶'}
+            </button>
+          </div>
         </div>
-        <SwipeDeck
-          profiles={profiles}
-          currentIndex={currentIndex}
-          onSwipe={handleSwipe}
-          userName={userName}
-        />
+        <div className="swipe-main">
+          <SwipeDeck
+            profiles={profiles}
+            currentIndex={currentIndex}
+            onSwipe={handleSwipe}
+            userName={userName}
+          />
+        </div>
         {showMatchAnimation && (
           <div className="match-animation">
             <div className="match-content">
@@ -147,36 +171,19 @@ export default function App() {
             </div>
           </div>
         )}
-        <div className="bottom-nav">
-          <button onClick={backToSwipe} className="nav-btn active">
-            <span className="nav-icon">🔥</span>
-            <span>Swipe</span>
-          </button>
-          <button onClick={() => setScreen(SCREENS.MATCHES)} className="nav-btn">
-            <span className="nav-icon">💬</span>
-            {matches.length > 0 && <span className="badge">{matches.length}</span>}
-            <span>Matches</span>
-          </button>
-        </div>
-        <div className="footer">
-          <button onClick={() => setLegalModal('impressum')}>Impressum</button>
-          <button onClick={() => setLegalModal('datenschutz')}>Datenschutz</button>
-          <span className="yt-hidden">
-            <a href="https://youtube.com/@jamingde" target="_blank" rel="noopener noreferrer">
-              Tunder Partner
-            </a>
-          </span>
-        </div>
+        <Footer />
         {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
-      </>
+      </div>
     );
   }
 
   if (screen === SCREENS.MATCHES) {
     return (
-      <>
-        <div className="matches-screen">
+      <div className="app-container">
+        <div className="swipe-header">
           <h1>Deine Matches 🔥</h1>
+        </div>
+        <div className="matches-screen">
           {matches.length === 0 ? (
             <p className="no-matches">Noch keine Matches. Weiter swipen!</p>
           ) : (
@@ -194,28 +201,9 @@ export default function App() {
             </div>
           )}
         </div>
-        <div className="bottom-nav">
-          <button onClick={backToSwipe} className="nav-btn">
-            <span className="nav-icon">🔥</span>
-            <span>Swipe</span>
-          </button>
-          <button onClick={() => {}} className="nav-btn active">
-            <span className="nav-icon">💬</span>
-            {matches.length > 0 && <span className="badge">{matches.length}</span>}
-            <span>Matches</span>
-          </button>
-        </div>
-        <div className="footer">
-          <button onClick={() => setLegalModal('impressum')}>Impressum</button>
-          <button onClick={() => setLegalModal('datenschutz')}>Datenschutz</button>
-          <span className="yt-hidden">
-            <a href="https://youtube.com/@jamingde" target="_blank" rel="noopener noreferrer">
-              Tunder Partner
-            </a>
-          </span>
-        </div>
+        <Footer />
         {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
-      </>
+      </div>
     );
   }
 

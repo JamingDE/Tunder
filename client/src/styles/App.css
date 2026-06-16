@@ -20,16 +20,22 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: var(--bg);
   color: var(--text);
-  overflow: hidden;
-  height: 100vh;
+  overflow-y: auto;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 /* NAME ENTRY */
 .name-entry-screen {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
   background: linear-gradient(135deg, #fe3c72 0%, #ff6b6b 50%, #ffa502 100%);
 }
 
@@ -106,27 +112,69 @@ body {
   color: var(--text-light);
 }
 
-/* SWIPE SCREEN */
-.swipe-screen {
-  height: 100vh;
+/* SWIPE HEADER */
+.swipe-header {
   display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.header {
-  padding: 16px 20px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
   background: white;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   z-index: 10;
+  flex-shrink: 0;
 }
 
-.header h1 {
+.swipe-header h1 {
   font-size: 1.6rem;
   background: linear-gradient(135deg, #fe3c72, #ff6b6b);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chat-list-btn {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  position: relative;
+  padding: 4px;
+}
+
+.fullscreen-btn {
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.fullscreen-btn:hover {
+  opacity: 1;
+}
+
+/* SWIPE MAIN */
+.swipe-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.swipe-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 0;
 }
 
 .card-container {
@@ -135,15 +183,16 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 20px;
+  padding: 16px;
+  min-height: 0;
 }
 
 .card {
   position: absolute;
   width: 90%;
   max-width: 400px;
-  height: 70vh;
-  max-height: 550px;
+  height: 55vh;
+  max-height: 480px;
   border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--shadow);
@@ -229,15 +278,16 @@ body {
 .swipe-buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  padding: 20px;
+  gap: 24px;
+  padding: 16px;
   background: white;
   box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  flex-shrink: 0;
 }
 
 .swipe-btn {
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   border: none;
   font-size: 1.5rem;
@@ -263,8 +313,8 @@ body {
   background: linear-gradient(135deg, #4edd78, #44bf6a);
   color: white;
   font-size: 1.8rem;
-  width: 70px;
-  height: 70px;
+  width: 64px;
+  height: 64px;
 }
 
 .superlike-btn {
@@ -297,6 +347,7 @@ body {
   text-align: center;
   color: white;
   animation: scaleIn 0.5s ease;
+  padding: 20px;
 }
 
 @keyframes scaleIn {
@@ -359,6 +410,7 @@ body {
   padding: 16px;
   background: white;
   box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  flex-shrink: 0;
 }
 
 .nav-btn {
@@ -400,10 +452,9 @@ body {
 
 /* MATCHES SCREEN */
 .matches-screen {
-  height: 100vh;
+  flex: 1;
   padding: 20px;
   overflow-y: auto;
-  padding-bottom: 80px;
 }
 
 .matches-screen h1 {
@@ -614,10 +665,11 @@ body {
   justify-content: center;
   align-items: center;
   gap: 20px;
-  padding: 16px;
-  background: #f9f9f9;
-  border-top: 1px solid #eee;
+  padding: 20px;
+  background: #f0f0f0;
+  border-top: 1px solid #ddd;
   font-size: 0.8rem;
+  flex-shrink: 0;
 }
 
 .footer button {
@@ -701,34 +753,6 @@ body {
   font-size: 0.75rem !important;
   color: #aaa !important;
   font-style: italic;
-}
-
-/* SWIPE HEADER */
-.swipe-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-  z-index: 10;
-}
-
-.swipe-header h1 {
-  font-size: 1.6rem;
-  background: linear-gradient(135deg, #fe3c72, #ff6b6b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.chat-list-btn {
-  background: none;
-  border: none;
-  font-size: 1.4rem;
-  cursor: pointer;
-  position: relative;
-  padding: 4px;
 }
 
 /* CHAT LIST OVERLAY */
@@ -845,10 +869,26 @@ body {
   }
 
   .card {
-    height: 65vh;
+    height: 50vh;
   }
 
   .match-content h1 {
     font-size: 2.2rem;
+  }
+
+  .swipe-buttons {
+    padding: 12px;
+    gap: 16px;
+  }
+
+  .swipe-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+  }
+
+  .like-btn {
+    width: 58px;
+    height: 58px;
   }
 }
