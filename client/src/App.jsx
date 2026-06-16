@@ -86,6 +86,16 @@ export default function App() {
     }
   };
 
+  const handleClearData = () => {
+    setUserName('');
+    setProfiles([]);
+    setMatches([]);
+    setActiveChat(null);
+    setCurrentIndex(0);
+    setShowMatchAnimation(null);
+    setScreen(SCREENS.ENTRY);
+  };
+
   const Footer = () => (
     <div className="footer">
       <button onClick={() => setLegalModal('impressum')}>Impressum</button>
@@ -100,11 +110,11 @@ export default function App() {
 
   if (screen === SCREENS.ENTRY) {
     return (
-      <>
+      <div className="app-container entry-container">
         <NameEntry onSubmit={handleNameSubmit} />
         <Footer />
-        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
-      </>
+        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} onClearData={handleClearData} />}
+      </div>
     );
   }
 
@@ -172,7 +182,7 @@ export default function App() {
           </div>
         )}
         <Footer />
-        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} onClearData={handleClearData} />}
       </div>
     );
   }
@@ -202,7 +212,7 @@ export default function App() {
           )}
         </div>
         <Footer />
-        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} onClearData={handleClearData} />}
       </div>
     );
   }

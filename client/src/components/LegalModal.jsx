@@ -1,7 +1,15 @@
 import { useState } from 'react';
 
-export default function LegalModal({ type, onClose }) {
+export default function LegalModal({ type, onClose, onClearData }) {
   const isImpressum = type === 'impressum';
+
+  const handleClearData = () => {
+    if (window.confirm('Alle Daten wirklich löschen? Chats, Matches und Name werden zurückgesetzt.')) {
+      sessionStorage.clear();
+      onClearData();
+      onClose();
+    }
+  };
 
   return (
     <div className="legal-overlay" onClick={onClose}>
@@ -43,6 +51,9 @@ export default function LegalModal({ type, onClose }) {
             <p>Alle Gespräche werden an OpenRouter gesendet. Die alten Menschen sind KI.</p>
             <h2>4. Haftung</h2>
             <p>Wir haften für nichts. Das ist ein Troll-Projekt.</p>
+            <button className="clear-data-btn" onClick={handleClearData}>
+              🗑️ Alle Daten löschen
+            </button>
             <p className="legal-fine">Diese Seite ist Satire. Keine echten Daten.</p>
           </div>
         )}
