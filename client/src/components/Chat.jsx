@@ -1,7 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 
 export default function Chat({ profile, userName, onBack }) {
-  const [messages, setMessages] = useState([]);
+  const storageKey = `tunder_chat_${profile.id}`;
+  const [messages, setMessages] = useState(() => {
+    const saved = sessionStorage.getItem(storageKey);
+    return saved ? JSON.parse(saved) : [];
+  });
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const messagesEndRef = useRef(null);
@@ -15,7 +19,13 @@ export default function Chat({ profile, userName, onBack }) {
   }, [messages, typing]);
 
   useEffect(() => {
-    sendFirstMessage();
+    sessionStorage.setItem(storageKey, JSON.stringify(messages));
+  }, [messages, storageKey]);
+
+  useEffect(() => {
+    if (messages.length === 0) {
+      sendFirstMessage();
+    }
   }, []);
 
   const sendFirstMessage = async () => {
@@ -74,7 +84,7 @@ export default function Chat({ profile, userName, onBack }) {
     <div className="chat-screen">
       <div className="chat-header">
         <button className="back-btn" onClick={onBack}>←</button>
-        <img src={profile.image} alt={profile.name} className="chat-avatar" />
+        <img src={profile.image} alt={profile.name} className="chat-avatar" draggable={false} onDragStart={(e) => e.preventDefault()} />
         <div className="chat-user-info">
           <h3>{profile.name}, {profile.age}</h3>
           <span className="online-status">Online</span>

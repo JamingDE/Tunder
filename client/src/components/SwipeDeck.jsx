@@ -46,7 +46,7 @@ export default function SwipeDeck({ profiles, currentIndex, onSwipe, userName })
       <div className="card-container">
         {profiles.length > currentIndex + 1 && (
           <div className="card card-background">
-            <img src={profiles[currentIndex + 1].image} alt={profiles[currentIndex + 1].name} />
+            <img src={profiles[currentIndex + 1].image} alt={profiles[currentIndex + 1].name} draggable={false} onDragStart={(e) => e.preventDefault()} />
           </div>
         )}
         <div
@@ -63,8 +63,9 @@ export default function SwipeDeck({ profiles, currentIndex, onSwipe, userName })
           onTouchStart={handleMouseDown}
           onTouchMove={handleMouseMove}
           onTouchEnd={handleMouseUp}
+          onDragStart={(e) => e.preventDefault()}
         >
-          <img src={profile.image} alt={profile.name} />
+          <img src={profile.image} alt={profile.name} draggable={false} onDragStart={(e) => e.preventDefault()} />
           <div className="card-info">
             <h2>{profile.name}, {profile.age}</h2>
             <p className="bio">{profile.bio}</p>

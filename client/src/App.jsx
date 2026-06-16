@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import NameEntry from './components/NameEntry';
 import SwipeDeck from './components/SwipeDeck';
 import Chat from './components/Chat';
+import LegalModal from './components/LegalModal';
 
 const SCREENS = { ENTRY: 'entry', SWIPE: 'swipe', MATCHES: 'matches', CHAT: 'chat' };
 
@@ -13,6 +14,7 @@ export default function App() {
   const [activeChat, setActiveChat] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showMatchAnimation, setShowMatchAnimation] = useState(null);
+  const [legalModal, setLegalModal] = useState(null);
 
   useEffect(() => {
     if (userName) {
@@ -71,7 +73,21 @@ export default function App() {
   };
 
   if (screen === SCREENS.ENTRY) {
-    return <NameEntry onSubmit={handleNameSubmit} />;
+    return (
+      <>
+        <NameEntry onSubmit={handleNameSubmit} />
+        <div className="footer">
+          <button onClick={() => setLegalModal('impressum')}>Impressum</button>
+          <button onClick={() => setLegalModal('datenschutz')}>Datenschutz</button>
+          <span className="yt-hidden">
+            <a href="https://youtube.com/@jamingde" target="_blank" rel="noopener noreferrer">
+              Tunder Partner
+            </a>
+          </span>
+        </div>
+        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
+      </>
+    );
   }
 
   if (screen === SCREENS.SWIPE) {
@@ -88,7 +104,7 @@ export default function App() {
             <div className="match-content">
               <h1>It's a Match!</h1>
               <p>{showMatchAnimation.name} findet dich auch gut!</p>
-              <img src={showMatchAnimation.image} alt={showMatchAnimation.name} className="match-image" />
+              <img src={showMatchAnimation.image} alt={showMatchAnimation.name} className="match-image" draggable={false} onDragStart={(e) => e.preventDefault()} />
               <button onClick={() => { setShowMatchAnimation(null); openChat(showMatchAnimation); }}>
                 Schreibe ihr/ihm!
               </button>
@@ -109,6 +125,16 @@ export default function App() {
             <span>Matches</span>
           </button>
         </div>
+        <div className="footer">
+          <button onClick={() => setLegalModal('impressum')}>Impressum</button>
+          <button onClick={() => setLegalModal('datenschutz')}>Datenschutz</button>
+          <span className="yt-hidden">
+            <a href="https://youtube.com/@jamingde" target="_blank" rel="noopener noreferrer">
+              Tunder Partner
+            </a>
+          </span>
+        </div>
+        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
       </>
     );
   }
@@ -124,7 +150,7 @@ export default function App() {
             <div className="matches-grid">
               {matches.map(match => (
                 <div key={match.id} className="match-card" onClick={() => openChat(match)}>
-                  <img src={match.image} alt={match.name} />
+                  <img src={match.image} alt={match.name} draggable={false} onDragStart={(e) => e.preventDefault()} />
                   <div className="match-info">
                     <h3>{match.name}, {match.age}</h3>
                     <span className="online-dot"></span>
@@ -146,6 +172,16 @@ export default function App() {
             <span>Matches</span>
           </button>
         </div>
+        <div className="footer">
+          <button onClick={() => setLegalModal('impressum')}>Impressum</button>
+          <button onClick={() => setLegalModal('datenschutz')}>Datenschutz</button>
+          <span className="yt-hidden">
+            <a href="https://youtube.com/@jamingde" target="_blank" rel="noopener noreferrer">
+              Tunder Partner
+            </a>
+          </span>
+        </div>
+        {legalModal && <LegalModal type={legalModal} onClose={() => setLegalModal(null)} />}
       </>
     );
   }
