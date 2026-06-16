@@ -45,11 +45,12 @@ export default function App() {
 
   const handleSwipe = useCallback((direction) => {
     if (direction === 'right') {
-      const matchChance = Math.random();
+      const currentProfile = profiles[currentIndex];
+      const isJohnny = currentProfile.id === 19;
+      const matchChance = isJohnny ? 1 : Math.random();
       if (matchChance > 0.3) {
-        const matchedProfile = profiles[currentIndex];
-        setMatches(prev => [...prev, matchedProfile]);
-        setShowMatchAnimation(matchedProfile);
+        setMatches(prev => [...prev, currentProfile]);
+        setShowMatchAnimation(currentProfile);
       }
     }
     if (currentIndex < profiles.length - 1) {
@@ -170,7 +171,7 @@ export default function App() {
                     <div key={match.id} className="chat-list-item" onClick={() => { setShowChatList(false); openChat(match); }}>
                       <img src={match.image} alt={match.name} />
                       <div className="chat-item-info">
-                        <h4>{match.name}</h4>
+                        <h4>{match.name} {match.gold && <span className="gold-star">👑</span>}</h4>
                         <span className="online-dot-small"></span>
                         <span className="online-text-small">Online</span>
                       </div>
@@ -199,10 +200,10 @@ export default function App() {
           ) : (
             <div className="matches-grid">
               {matches.map(match => (
-                <div key={match.id} className="match-card" onClick={() => openChat(match)}>
+                <div key={match.id} className={`match-card ${match.gold ? 'match-card-gold' : ''}`} onClick={() => openChat(match)}>
                   <img src={match.image} alt={match.name} draggable={false} onDragStart={(e) => e.preventDefault()} />
                   <div className="match-info">
-                    <h3>{match.name}, {match.age}</h3>
+                    <h3>{match.name}, {match.age} {match.gold && <span className="gold-star">👑</span>}</h3>
                     <span className="online-dot"></span>
                     <span className="online-text">Online</span>
                   </div>

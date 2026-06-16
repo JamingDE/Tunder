@@ -64,7 +64,10 @@ export default function SwipeDeck({ profiles, currentIndex, onSwipe, userName })
         >
           <img src={profile.image} alt={profile.name} draggable={false} onDragStart={(e) => e.preventDefault()} />
           <div className="card-info">
-            <h2>{profile.name}, {profile.age}</h2>
+            <h2>
+              {profile.name}, {profile.age}
+              {profile.gold && <span className="gold-badge">👑 Tunder Gold</span>}
+            </h2>
             <p className="bio">{profile.bio}</p>
             <div className="interests">
               {profile.interests.map((interest, i) => (

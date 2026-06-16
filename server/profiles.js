@@ -1,6 +1,6 @@
 const profiles = [
   {
-    id: 1, name: "Grete", age: 67, image: "/images/grete-67.png",
+    id: 1, name: "Grete", age: 67, image: "/images/grete-67.png", gold: true,
     bio: "Rentnerin, liebe Blumen und meinen 3. Mann. Keine Spielereien! 🌺",
     interests: ["Gärtnern", "Schwimmen", "Kaffee & Kuchen"]
   },
@@ -20,7 +20,7 @@ const profiles = [
     interests: ["Tee", "Stricken", "Enkel"]
   },
   {
-    id: 5, name: "Ursula", age: 70, image: "/images/ursula-70.png",
+    id: 5, name: "Ursula", age: 70, image: "/images/ursula-70.png", gold: true,
     bio: "Witwe, 2 Kinder, 4 Enkel. Suche jemanden der mich zum Tanzen mitnimmt 💃",
     interests: ["Tanzen", "Musik", "Familie"]
   },
@@ -90,7 +90,7 @@ const profiles = [
     interests: ["Fußball", "Bier", "Grillen"]
   },
   {
-    id: 19, name: "Johnny", age: 45, image: "/images/johnny-sins.jpeg",
+    id: 19, name: "Johnny", age: 45, image: "/images/johnny-sins.jpeg", gold: true,
     bio: "Ich habe viele Talente... Doktor, Pilot, Feuerwehrmann und mehr 😏",
     interests: ["Alles", "Abenteuer", "Viel"]
   }

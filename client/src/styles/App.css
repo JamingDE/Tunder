@@ -225,6 +225,29 @@ body {
 .card-info h2 {
   font-size: 1.8rem;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gold-badge {
+  font-size: 0.8rem;
+  background: linear-gradient(135deg, #ffd700, #ffaa00);
+  color: #333;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+.gold-star {
+  font-size: 1rem;
+}
+
+.match-card-gold {
+  border: 2px solid #ffd700;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
 }
 
 .bio {
